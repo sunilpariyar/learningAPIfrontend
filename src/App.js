@@ -3,21 +3,15 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // import Info from '../controllers/dataController'
 import './App.css';
-// import Form from './components/Form'
+import Form from './components/Form'
 
 export default class App extends Component{
     constructor(){
         super();
         this.state = {
             infos: [],
-            newData: {
-                name: '',
-                address: '',
-                comment: ''
-            }
         }        
-    }
-    
+    }    
 
     componentDidMount() {
         const that = this;
@@ -32,50 +26,20 @@ export default class App extends Component{
         }).catch(function(error) {
                 console.log(error);
             })
-    }
-    handleClickAdd = (e) => {
-        e.preventDefault();
-        console.log('success');
-        const data = {
-            name: this.state.newData.name,
-            address: this.state.newData.address,
-            comment: this.state.newData.comment
-            // name: 'Fred',
-            // address: 'USA',
-            // comment: 'hi there'
-        };
-        axios({
-            method: 'post',
-            url: 'http://localhost:8080/data/post',
-            data
-          });
-          const { infos } = this.state;
-          this.setState({
-              infos: [ ...infos, data ]
-          })
+    }    
 
-    }
-
-    handleClickDelete = (value) => {
-        console.log(value);
+    handleClickDelete = (data) => {
         axios({
             method: 'delete',
             url: 'http://localhost:8080/data/:id',
             params: {
-                id: value
+                id: data._id
             }
-          });
-       
-    }
-
-    handleChangeFor = (propertyName) => (event) => {
-        const { info } = this.state.newData;
-        const newInfo = {
-          ...info,
-          [propertyName]: event.target.value
-        };
-        this.setState({ newData: newInfo });
-        console.log(newInfo);
+          })
+          var infosArray = this.state.infos;
+          var index = infosArray.indexOf(data);
+          infosArray.splice(index,1);
+          this.setState({infos: infosArray});
     }
     
     render(){
@@ -83,23 +47,9 @@ export default class App extends Component{
         var rowNum = 0;
         return (
             <div>
-                <form  onSubmit={this.handleClickAdd}>
-                    <input type="text" placeholder="Name" 
-                        value={this.state.newData.name} 
-                        onChange={this.handleChangeFor('name')}
-                        id="name"/>
-                    <input type="text" placeholder="Address" 
-                        value={this.state.newData.address} 
-                        onChange={this.handleChangeFor('address')}
-                        id="address"/>
-                    <input type="text" placeholder="Comment" 
-                        value={this.state.newData.comment}
-                        onChange={this.handleChangeFor('comment')}
-                        id="comment"/>
-                    <input type="submit" value="Add"/>
-                </form>
-                
-                 
+                <br/>
+                <Form />
+                <br/>
                 <table style={{border:"1px solid", width:550}}>
                     <tbody>
                         <tr>
@@ -117,22 +67,16 @@ export default class App extends Component{
                             <td>{data.comment}</td>
                             <td>
                                 <button>Edit</button>
-                                <button value={data._id} onClick={() => this.handleClickDelete(data._id)}>Delete</button>
+                                <button value={data._id} onClick={() => this.handleClickDelete(data)}>Delete</button>
                             </td>                            
                         </tr>                                            
                         )}
                         
                     </tbody>
                 </table>
-                {/* <Form /> */}
-                {/* <form>                                
-                    <td><input type="text" placeholder="Name"></input></td>
-                    <td><input type="text" placeholder="Address"></input></td>
-                    <td><input type="text" placeholder="Comment"></input></td>
-                    
-                </form>       
-                 */}
             </div>
           );               
     }
 }
+
+
