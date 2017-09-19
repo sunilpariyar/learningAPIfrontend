@@ -20,6 +20,33 @@
 
 .table, th, td {
   border: 1px solid black;
+  
+}
+.dataTable {
+  /*background: #fff;*/
+  /*border: 1px solid #999;*/
+  float: center;
+  /* color: white; */
+  font-size: 16px;
+  /* font-weight: bold; */
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  /*line-height: 34px;
+  height: 100;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-left: 10px;*/
+  /* display: flex; */
+  padding: 1;
+  text-align: center;
+  width: 100;
+}
+.nav {
+  background-color: black;
+  height: 40px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: white;
+  text-align: center;
 }
 
 @keyframes App-logo-spin {
