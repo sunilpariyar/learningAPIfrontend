@@ -6,8 +6,8 @@ import './App.css';
 import Form from './components/Form'
 
 export default class App extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             infos: [],
         }        
@@ -41,6 +41,25 @@ export default class App extends Component{
           infosArray.splice(index,1);
           this.setState({infos: infosArray});
     }
+
+    handleClickAdd = (params) => {
+         
+        const data = {
+            name: params.name,
+            address: params.address,
+            comment: params.comment,
+        };
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/data/post',
+            data
+          });
+          const { infos } = this.state;
+          this.setState({
+              infos: [ ...infos, data ]
+          })
+            console.log('success');
+    } 
     
     render(){
         const data = this.state.infos;
@@ -48,7 +67,7 @@ export default class App extends Component{
         return (
             <div>
                 <br/>
-                <Form />
+                <Form handleClick={this.handleClickAdd} state={this.state.infos}/>
                 <br/>
                 <table style={{border:"1px solid", width:550}}>
                     <tbody>

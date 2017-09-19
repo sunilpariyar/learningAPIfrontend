@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 // import Info from '../controllers/dataController'
 import '../App.css';
 import axios from 'axios';
+import App from '../App.js'
 
 
 export default class Form extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
                 name: '',
                 address: '',
@@ -15,24 +16,24 @@ export default class Form extends Component{
         }
     }   
 
-    handleClickAdd = (e) => {
-        e.preventDefault();
-        const data = {
-            name: this.state.name,
-            address: this.state.address,
-            comment: this.state.comment
-        };
-        axios({
-            method: 'post',
-            url: 'http://localhost:8080/data/post',
-            data
-          });
-        //   const { infos } = this.state;
-        //   this.setState({
-        //       infos: [ ...infos, data ]
-        //   })
-            console.log('success');
-    } 
+    // handleClickAdd = (e) => {
+    //     e.preventDefault();
+    //     const data = {
+    //         name: this.state.name,
+    //         address: this.state.address,
+    //         comment: this.state.comment
+    //     };
+    //     axios({
+    //         method: 'post',
+    //         url: 'http://localhost:8080/data/post',
+    //         data
+    //       });
+    //     //   const { infos } = this.state;
+    //     //   this.setState({
+    //     //       infos: [ ...infos, data ]
+    //     //   })
+    //         console.log('success');
+    // } 
 
     handleChangeFor = (key) => (e) => {    
       var state = {};
@@ -43,7 +44,7 @@ export default class Form extends Component{
     render(){
         return(
             <div>
-                <form  onSubmit={this.handleClickAdd}>
+                <form  onSubmit={() => this.props.handleClick(this.state)}>
                     <input type="text" placeholder="Name" 
                         value={this.state.name} 
                         onChange={this.handleChangeFor('name')}
