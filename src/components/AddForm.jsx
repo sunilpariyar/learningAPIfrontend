@@ -52,7 +52,7 @@ export default class Form extends Component {
         const { name, address, comment } = this.state;
         return (
             <div>
-                <form onSubmit={(e) => this.props.handleClick(e,this.state)}>
+                <form onSubmit={ e => this.props.handleClick(e,this.state)}>
                     <input
                         type="text"
                         placeholder="Name"

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // import Info from '../controllers/dataController'
 import './App.css';
-import Form from './components/Form'
+import Form from './components/AddForm'
 
 export default class App extends Component {
     constructor(props) {
@@ -63,19 +63,37 @@ export default class App extends Component {
         console.log('success');
     }
 
-    // handleClickEdit = (data) => {
-    //     axios({
-    //         method: 'put',
-    //         url: 'http://localhost:8080/data/',
-    //         params: {
-    //             id: data._id
-    //         }
-    //     })
-    //     var infosArray = this.state.infos;
-    //     var index = infosArray.indexOf(data);
-    //     infosArray.splice(index, 1);
-    //     this.setState({ infos: infosArray });
-    // }
+    handleClickEdit = (data) => {
+        const infosArray = this.state.infos;
+        const index = infosArray.indexOf(data);
+        infosArray[index].name = "rajan",
+        infosArray[index].address = "nepal",
+        infosArray[index].comment = "namaskar"
+        const { infos } = this.state;
+        this.setState({
+            infos: [...infos, infosArray]
+        });
+        const editData = {
+            name: "rajan",
+            address: "nepal",
+            comment: "namaskar",
+        };
+        console.log(infosArray);
+
+        axios({
+            method: 'put',
+            url: 'http://localhost:8080/data/' + data._id,
+            editData
+            // params: {
+            //     id: data._id
+            // }
+        })
+
+        // var infosArray = this.state.infos;
+        // var index = infosArray.indexOf(data);
+        // infosArray.splice(index, 1);
+        // this.setState({ infos: infosArray });
+    }
 
     render() {
         const data = this.state.infos;
@@ -103,8 +121,12 @@ export default class App extends Component {
                                     <td>{data.address}</td>
                                     <td>{data.comment}</td>
                                     <td>
-                                        <button>Edit</button>
-                                        <button value={data._id} onClick={() => this.handleClickDelete(data)}>Delete</button>
+                                        <button value={data._id} onClick={() => this.handleClickEdit(data)}>
+                                            Edit
+                                        </button>
+                                        <button value={data._id} onClick={() => this.handleClickDelete(data)}>
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             )}
