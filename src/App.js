@@ -3,14 +3,28 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // import Info from '../controllers/dataController'
 import './App.css';
-import Form from './components/AddForm'
+import AddForm from './components/AddForm'
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
             infos: [],
-        }
+            // editContent:{
+            //     editableFlag: false,
+            //     editButtonValue: "Edit",
+            //     content: {
+            //         name: "",
+            //         address: "",
+            //         comment: ""
+            //     }
+
+            // }
+            editableFlag: false,
+            
+            editing: [],
+        }   
+              
     }
 
     componentDidMount() {
@@ -63,31 +77,65 @@ export default class App extends Component {
         console.log('success');
     }
 
-    handleClickEdit = (data) => {
-        const infosArray = this.state.infos;
-        const index = infosArray.indexOf(data);
-        infosArray[index].name = "rajan",
-        infosArray[index].address = "nepal",
-        infosArray[index].comment = "namaskar"
-        const { infos } = this.state;
-        this.setState({
-            infos: [...infos, infosArray]
-        });
-        const editData = {
-            name: "rajan",
-            address: "nepal",
-            comment: "namaskar",
-        };
-        console.log(infosArray);
+    handleClickEdit = (e, data) => {
+        e.preventDefault();
+        this.setState({editableFlag: true});
+        // this.setState({editButtonValue: "Add"})
+        // console.log(this.editableFlag);
+        // this.setState({editID: this.refs.tr.key});
+        
+        var edit = document.getElementById("editThis");
+        console.log(edit);
 
-        axios({
-            method: 'put',
-            url: 'http://localhost:8080/data/' + data._id,
-            editData
-            // params: {
-            //     id: data._id
-            // }
-        })
+        this.setState( state => {
+            if ( state.editing.includes( data._id )) {
+                return {
+                    editing: state.editing.filter( id => id !== data._id ),
+                };
+            }
+
+            return {
+                editing: [...state.editing, data._id],
+            }
+        });
+        // if(this.state.editID === data._id){
+        //     e.target.value = "Add";
+        //     this.setState({editableFlag: true});
+        // }
+    //     for (let i = 0; i < this.refs.lenght; i++){
+    //     if (data._id === this.refs._id) {
+    //         console.log(this.refs)
+    //     }
+    // }
+        
+
+        // data.editableFlag = true;
+        // data.editButtonValue = "Add";
+
+        // const infosArray = this.state.infos;
+        // const index = infosArray.indexOf(data);
+        // infosArray[index].name = "rajan",
+        // infosArray[index].address = "nepal",
+        // infosArray[index].comment = "namaskar"
+        // const { infos } = this.state;
+        // this.setState({
+        //     infos: [...infos, infosArray]
+        // });
+        // const editData = {
+        //     name: "rajan",
+        //     address: "nepal",
+        //     comment: "namaskar",
+        // };
+        // console.log(infosArray);
+
+        // axios({
+        //     method: 'put',
+        //     url: 'http://localhost:8080/data/' + data._id,
+        //     editData
+        //     // params: {
+        //     //     id: data._id
+        //     // }
+        // })
 
         // var infosArray = this.state.infos;
         // var index = infosArray.indexOf(data);
@@ -115,15 +163,17 @@ export default class App extends Component {
                                 <th>Operations</th>
                             </tr>
                             {data.map((data) =>
-                                <tr>
+                                <tr id="editThis" contentEditable={this.state.editing.includes(data._id)} name={data._id} key={data._id}>
                                     <td>{rowNum++}</td>
-                                    <td key={data._id}>{data.name}</td>
+                                    <td>{data.name}</td>
                                     <td>{data.address}</td>
                                     <td>{data.comment}</td>
                                     <td>
-                                        <button value={data._id} onClick={() => this.handleClickEdit(data)}>
-                                            Edit
-                                        </button>
+                                        {/* This is for Edit button */}
+                                        <input value={this.state.editing.includes(data._id) ? 'Stop' : 'Edit'} type="button" onClick={(e) => this.handleClickEdit(e, data)}>
+                                            
+                                        </input>
+                                        {/* This is for Delete button */}
                                         <button value={data._id} onClick={() => this.handleClickDelete(data)}>
                                             Delete
                                         </button>
@@ -135,8 +185,9 @@ export default class App extends Component {
                     </table>
                     </div>
                     <div style={{display:"flex", justifyContent:"space-around"}}>
+                        {/* This is for Add button */}
                         <br />
-                        <Form handleClick={this.handleClickAdd} />
+                        <AddForm handleClick={this.handleClickAdd} />
                         <br />
                     </div>
                 </div>

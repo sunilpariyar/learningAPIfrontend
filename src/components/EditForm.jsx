@@ -5,7 +5,7 @@ import '../App.css';
 // import axios from 'axios';
 // import App from '../App.js'
 
-export default class AddForm extends Component {
+export default class EditForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
